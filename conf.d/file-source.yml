@@ -1,0 +1,32 @@
+http:
+  services:
+    ha-server:
+      loadBalancer:
+        servers:
+          - url: "http://192.168.88.104:8123/"
+    ha-test-server:
+      loadBalancer:
+        servers:
+          - url: "http://192.168.88.104:8124/"
+
+  routers:
+    ha:
+      rule: "Host(`ha.imposibrus.space`)"
+      service: ha-server
+
+    ha-tls:
+      rule: "Host(`ha.imposibrus.space`)"
+      service: ha-server
+      tls:
+        certResolver: default
+
+    ha-test:
+      rule: "Host(`ha-test.home.imposibrus.space`)"
+      service: ha-test-server
+
+    ha-test-tls:
+      rule: "Host(`ha-test.home.imposibrus.space`)"
+      service: ha-test-server
+      tls:
+        certResolver: default
+
