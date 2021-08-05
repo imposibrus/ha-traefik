@@ -12,6 +12,10 @@ http:
       loadBalancer:
         servers:
           - url: "http://192.168.88.104:8124/"
+    hb-server:
+      loadBalancer:
+        servers:
+          - url: "http://192.168.88.104:8581/"
 
   routers:
     ha:
@@ -29,6 +33,15 @@ http:
     nr-tls:
       rule: "Host(`nr.imposibrus.space`)"
       service: nr-server
+      tls:
+        certResolver: default
+
+    hb:
+      rule: "Host(`hb.imposibrus.space`)"
+      service: hb-server
+    hb-tls:
+      rule: "Host(`hb.imposibrus.space`)"
+      service: hb-server
       tls:
         certResolver: default
 
