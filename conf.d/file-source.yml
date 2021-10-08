@@ -8,10 +8,6 @@ http:
       loadBalancer:
         servers:
           - url: "http://192.168.88.104:1880/"
-    ha-test-server:
-      loadBalancer:
-        servers:
-          - url: "http://192.168.88.104:8124/"
     hb-server:
       loadBalancer:
         servers:
@@ -45,12 +41,19 @@ http:
       tls:
         certResolver: default
 
-    ha-test:
-      rule: "Host(`ha-test.home.imposibrus.space`)"
-      service: ha-test-server
-    ha-test-tls:
-      rule: "Host(`ha-test.home.imposibrus.space`)"
-      service: ha-test-server
+
+tcp:
+  services:
+    mqtt-server:
+      loadBalancer:
+        servers:
+          - address: "192.168.88.104:1883"
+
+  routers:
+    mqtt-tls:
+      rule: "HostSNI(`mqtt.home.imposibrus.space`)"
+      service: mqtt-server
       tls:
         certResolver: default
+
 
