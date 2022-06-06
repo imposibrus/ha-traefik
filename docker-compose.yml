@@ -2,7 +2,7 @@ version: '3'
 services:
   traefik:
     # docker run -d --name='traefik' --restart=always -p 8081:8080 -p 80:80 -v $PWD/traefik.yml:/etc/traefik/traefik.yml traefik:v2.4.8
-    image: 'traefik:v2.4.8'
+    image: 'traefik:v2.6.6'
     container_name: 'traefik'
     restart: always
     network_mode: host
