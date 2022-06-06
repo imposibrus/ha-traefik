@@ -12,6 +12,22 @@ http:
       loadBalancer:
         servers:
           - url: "http://192.168.88.104:8581/"
+#    y2m-server:
+#      loadBalancer:
+#        servers:
+#          - url: "http://192.168.88.104:4433/"
+    z2m-server:
+      loadBalancer:
+        servers:
+          - url: "http://192.168.88.104:8082/"
+    next-cloud-server:
+      loadBalancer:
+        servers:
+          - url: "http://192.168.88.104:8083/"
+    clideo-mbp-2020-server:
+      loadBalancer:
+        servers:
+          - url: "http://192.168.88.244:80/"
 
   routers:
     ha:
@@ -22,6 +38,8 @@ http:
       service: ha-server
       tls:
         certResolver: default
+      middlewares:
+        - sslheader
 
     nr:
       rule: "Host(`nr.imposibrus.space`)"
@@ -41,6 +59,44 @@ http:
       tls:
         certResolver: default
 
+#    y2m-tls:
+#      rule: "Host(`y2m.home.imposibrus.space`)"
+#      service: y2m-server
+#      tls:
+#        certResolver: default
+
+    z2m:
+      rule: "Host(`z2m.home.imposibrus.space`)"
+      service: z2m-server
+    z2m-tls:
+      rule: "Host(`z2m.home.imposibrus.space`)"
+      service: z2m-server
+      tls:
+        certResolver: default
+
+    next-cloud:
+      rule: "Host(`nc.home.imposibrus.space`)"
+      service: next-cloud-server
+    next-cloud-tls:
+      rule: "Host(`nc.home.imposibrus.space`)"
+      service: next-cloud-server
+      tls:
+        certResolver: default
+
+    clideo-mbp-2020:
+      rule: "Host(`clideo-mbp-2020.home.imposibrus.space`)"
+      service: clideo-mbp-2020-server
+    clideo-mbp-2020-tls:
+      rule: "Host(`clideo-mbp-2020.home.imposibrus.space`)"
+      service: clideo-mbp-2020-server
+      tls:
+        certResolver: default
+
+  middlewares:
+    sslheader:
+      headers:
+        customRequestHeaders:
+          X-Forwarded-Proto: https
 
 tcp:
   services:
