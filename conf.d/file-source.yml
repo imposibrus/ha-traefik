@@ -27,7 +27,15 @@ http:
     clideo-mbp-2020-server:
       loadBalancer:
         servers:
-          - url: "http://192.168.88.244:80/"
+          - url: "http://192.168.88.69:80/"
+    esphome-server:
+      loadBalancer:
+        servers:
+          - url: "http://192.168.88.104:6052/"
+    transmission-server:
+      loadBalancer:
+        servers:
+          - url: "http://192.168.88.104:9094/"
 
   routers:
     ha:
@@ -92,11 +100,40 @@ http:
       tls:
         certResolver: default
 
+    esphome:
+      rule: "Host(`esphome.imposibrus.space`)"
+      service: esphome-server
+      middlewares:
+        - basic-auth
+    esphome-tls:
+      rule: "Host(`esphome.imposibrus.space`)"
+      service: esphome-server
+      middlewares:
+        - basic-auth
+      tls:
+        certResolver: default
+
+    transmission:
+      rule: "Host(`tr.home.imposibrus.space`)"
+      service: transmission-server
+      middlewares:
+        - basic-auth
+    transmission-tls:
+      rule: "Host(`tr.home.imposibrus.space`)"
+      service: transmission-server
+      middlewares:
+        - basic-auth
+      tls:
+        certResolver: default
+
   middlewares:
     sslheader:
       headers:
         customRequestHeaders:
           X-Forwarded-Proto: https
+    basic-auth:
+      basicAuth:
+        usersFile: /etc/traefik/conf.d/basicAuthUsers
 
 tcp:
   services:

@@ -1,0 +1,4 @@
+# generate password: htpasswd -nb user password
+
+user:$apr1$uwmymPFA$VI8JFzsLG88Ht3Q6f9qKE1
+
