@@ -1,19 +1,24 @@
 version: '3'
+
+networks:
+  traefik:
+    external: true
+
 services:
   traefik:
-    # docker run -d --name='traefik' --restart=always -p 8081:8080 -p 80:80 -v $PWD/traefik.yml:/etc/traefik/traefik.yml traefik:v2.4.8
     image: 'traefik:v2.6.6'
     container_name: 'traefik'
     restart: always
-    network_mode: host
-#    ports:
-#      - 8081:8080
-#      - 80:80
-#      - 443:443
+    networks:
+      - traefik
+    ports:
+      - 8081:8081
+      - 80:80
+      - 443:443
     volumes:
       - ./traefik.yml:/etc/traefik/traefik.yml
       - ./conf.d:/etc/traefik/conf.d
       - /var/run/docker.sock:/var/run/docker.sock
-#    labels:
-#      - "traefik.enable=true"
+    extra_hosts:
+      - "host.docker.internal:172.17.0.1"
 

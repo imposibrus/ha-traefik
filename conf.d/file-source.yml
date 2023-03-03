@@ -1,115 +1,27 @@
 http:
   services:
-    ha-server:
-      loadBalancer:
-        servers:
-          - url: "http://192.168.88.104:8123/"
-    nr-server:
-      loadBalancer:
-        servers:
-          - url: "http://192.168.88.104:1880/"
-    hb-server:
-      loadBalancer:
-        servers:
-          - url: "http://192.168.88.104:8581/"
-#    y2m-server:
-#      loadBalancer:
-#        servers:
-#          - url: "http://192.168.88.104:4433/"
-    z2m-server:
-      loadBalancer:
-        servers:
-          - url: "http://192.168.88.104:8082/"
-    next-cloud-server:
-      loadBalancer:
-        servers:
-          - url: "http://192.168.88.104:8083/"
-    clideo-mbp-2020-server:
+    clideo-mbp-2021-server:
       loadBalancer:
         servers:
           - url: "http://192.168.88.69:80/"
-    esphome-server:
-      loadBalancer:
-        servers:
-          - url: "http://192.168.88.104:6052/"
     transmission-server:
       loadBalancer:
         servers:
           - url: "http://192.168.88.104:9094/"
 
   routers:
-    ha:
-      rule: "Host(`ha.imposibrus.space`)"
-      service: ha-server
-    ha-tls:
-      rule: "Host(`ha.imposibrus.space`)"
-      service: ha-server
-      tls:
-        certResolver: default
-      middlewares:
-        - sslheader
-
-    nr:
-      rule: "Host(`nr.imposibrus.space`)"
-      service: nr-server
-    nr-tls:
-      rule: "Host(`nr.imposibrus.space`)"
-      service: nr-server
-      tls:
-        certResolver: default
-
-    hb:
-      rule: "Host(`hb.imposibrus.space`)"
-      service: hb-server
-    hb-tls:
-      rule: "Host(`hb.imposibrus.space`)"
-      service: hb-server
-      tls:
-        certResolver: default
-
-#    y2m-tls:
-#      rule: "Host(`y2m.home.imposibrus.space`)"
-#      service: y2m-server
-#      tls:
-#        certResolver: default
-
-    z2m:
-      rule: "Host(`z2m.home.imposibrus.space`)"
-      service: z2m-server
-    z2m-tls:
-      rule: "Host(`z2m.home.imposibrus.space`)"
-      service: z2m-server
-      tls:
-        certResolver: default
-
-    next-cloud:
-      rule: "Host(`nc.home.imposibrus.space`)"
-      service: next-cloud-server
-    next-cloud-tls:
-      rule: "Host(`nc.home.imposibrus.space`)"
-      service: next-cloud-server
-      tls:
-        certResolver: default
-
-    clideo-mbp-2020:
-      rule: "Host(`clideo-mbp-2020.home.imposibrus.space`)"
-      service: clideo-mbp-2020-server
-    clideo-mbp-2020-tls:
-      rule: "Host(`clideo-mbp-2020.home.imposibrus.space`)"
-      service: clideo-mbp-2020-server
-      tls:
-        certResolver: default
-
-    esphome:
-      rule: "Host(`esphome.imposibrus.space`)"
-      service: esphome-server
+    clideo-mbp-2021:
+      rule: "Host(`clideo-mbp-2021.home.imposibrus.space`)"
+      service: clideo-mbp-2021-server
       middlewares:
         - basic-auth
-    esphome-tls:
-      rule: "Host(`esphome.imposibrus.space`)"
-      service: esphome-server
+        - cors
+    clideo-mbp-2021-tls:
+      rule: "Host(`clideo-mbp-2021.home.imposibrus.space`)"
+      service: clideo-mbp-2021-server
       middlewares:
         - basic-auth
+        - cors
       tls:
         certResolver: default
 
@@ -134,19 +46,29 @@ http:
     basic-auth:
       basicAuth:
         usersFile: /etc/traefik/conf.d/basicAuthUsers
+    cors:
+      headers:
+        accessControlAllowMethods:
+          - GET
+          - OPTIONS
+          - PUT
+        accessControlAllowOriginList:
+          - '*'
+        accessControlMaxAge: 1000
+        addVaryHeader: true
 
-tcp:
-  services:
-    mqtt-server:
-      loadBalancer:
-        servers:
-          - address: "192.168.88.104:1883"
-
-  routers:
-    mqtt-tls:
-      rule: "HostSNI(`mqtt.home.imposibrus.space`)"
-      service: mqtt-server
-      tls:
-        certResolver: default
+#tcp:
+#  services:
+#    mqtt-server:
+#      loadBalancer:
+#        servers:
+#          - address: "192.168.88.104:1883"
+#
+#  routers:
+#    mqtt-tls:
+#      rule: "HostSNI(`mqtt.home.imposibrus.space`)"
+#      service: mqtt-server
+#      tls:
+#        certResolver: default
 
 
